@@ -72,6 +72,35 @@ app.delete('/todos/:id', function (req, res) {
     }
 });
 
+app.put('/todos/:id', function (req, res) {
+
+            var body = _.pick(req.body, 'description', 'completed');
+            var validAttributes = {};
+            
+    // check input
+    if (body.hasOwnProperty('completed') && _.isBoolean(body.completed)) {
+        validAttributes.completed = body.completed;
+    } else if (body.hasOwnProperty('completed')) {
+            return res.status(400).send();
+        }
+
+        if (body.hasOwnProperty('description') && _.isString(body.completed) && body.description.trim().length > 0) {
+            validAttributes.description = body.description;
+        } else if (body.hasOwnProperty('description')) {
+                return res.status(400).send();
+            }
+        
+        
+        // update   mit _extend
+   var todId = parseInt(req.params.id,10)
+   var matcheTodo = _.findWhere(todos,{id:todId})
+   if (!matcheTodo){
+         return res.status(404).json({"error":"no todo found"});  
+    }
+    _.extend(matcheTodo, validAttributes);
+   res.json(matcheTodo);
+            
+});
 
 app.listen(PORT, function () {
     console.log('Express listening on Port: ' + PORT)
