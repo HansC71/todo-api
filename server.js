@@ -64,8 +64,11 @@ app.delete('/todos/:id', function (req, res) {
     else 
     {
     todos = _.without(todos, matcheTodo);
-    
-    res.json({matcheTodo},{todos});
+    var data = {
+     matcheTodo:matcheTodo,
+        todos:todos
+    }
+    res.json(data);
     }
 });
 
