@@ -15,10 +15,10 @@ app.get('/', function (req, res) {
 
 
 
-//get /totos?completed=true
+//get /totos?completed=true&q=work
 app.get('/todos', function (req, res) {
     var queryParams=req.query;
-    console.log(queryParams.completed);
+    //console.log(queryParams.completed);
     var filterdTodos = todos;
     if (queryParams.hasOwnProperty('completed') && (queryParams.completed === 'true')) {
         filterdTodos = _.where(filterdTodos, {completed: true});
@@ -27,6 +27,17 @@ app.get('/todos', function (req, res) {
         filterdTodos = _.where(filterdTodos, {completed: false});
         console.log('bin imm completed false');
     } 
+    
+    if (queryParams.hasOwnProperty('q') && (queryParams.q.length >0)) {
+        console.log('bin imm filter');
+        filterdTodos = _.filter(filterdTodos, function(todo){
+            var such = queryParams.q;
+            console.log(todo);
+         return todo.description.indexOf(such)> -1;
+        });
+        
+    }
+    
     
     res.json(filterdTodos);
     
